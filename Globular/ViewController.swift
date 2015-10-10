@@ -14,9 +14,7 @@ class ViewController: UIViewController
 {
     let skView = SKView()
     let scene = SKScene()
-    
-    let effectNode = SKEffectNode()
-    
+
     let radialGravity = SKFieldNode.radialGravityField()
     
     override func viewDidLoad()
@@ -57,27 +55,48 @@ class ViewController: UIViewController
         createWalls()
         
         // ----
-        
-        /*
-        effectNode.filter = CIFilter(name: "CIGaussianBlur")
-        scene.addChild(effectNode)
-        */
+
+        scene.filter = metaBallFilter()
+        scene.shouldEnableEffects = true
+
     }
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?)
+    func metaBallFilter() -> CIFilter
     {
-        radialGravity.strength = -2.5
+        return MetaBallFilter()
+    }
+    
+    func setGravityFromTouch(touch: UITouch)
+    {
         radialGravity.falloff = 1
         
-        radialGravity.position = CGPoint(x: touches.first!.locationInView(skView).x,
-            y: view.frame.height - touches.first!.locationInView(skView).y)
+        radialGravity.strength = (traitCollection.forceTouchCapability == UIForceTouchCapability.Available) ?
+            Float(touch.force / touch.maximumPossibleForce) * -1.5 :
+            -1.5
+        
+        radialGravity.position = CGPoint(x: touch.locationInView(skView).x,
+            y: view.frame.height - touch.locationInView(skView).y)
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?)
+    {
+        guard let touch = touches.first else
+        {
+            return;
+        }
+        
+        setGravityFromTouch(touch)
     }
     
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?)
     {
-        radialGravity.position = CGPoint(x: touches.first!.locationInView(skView).x,
-                y: view.frame.height - touches.first!.locationInView(skView).y)
+        guard let touch = touches.first else
+        {
+            return;
+        }
+        
+        setGravityFromTouch(touch)
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?)
