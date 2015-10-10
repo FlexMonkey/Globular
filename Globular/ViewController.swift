@@ -16,6 +16,7 @@ class ViewController: UIViewController
     let scene = SKScene()
 
     let radialGravity = SKFieldNode.radialGravityField()
+    let dragField = SKFieldNode.dragField()
     
     override func viewDidLoad()
     {
@@ -27,14 +28,15 @@ class ViewController: UIViewController
         skView.backgroundColor = UIColor.grayColor()
         view.addSubview(skView)
         
-        for _ in 0 ... 100
+        for i in 0 ... 150
         {
             let blobOne = SKShapeNode(circleOfRadius: 10)
             
             blobOne.position = CGPoint(x: CGFloat(drand48()) * view.frame.width,
                 y: CGFloat(drand48()) * view.frame.height)
             
-            blobOne.fillColor = UIColor.redColor()
+            blobOne.fillColor = [UIColor.redColor(), UIColor.greenColor(), UIColor.blueColor(), UIColor.cyanColor(), UIColor.magentaColor(), UIColor.yellowColor()][i % 6]
+            blobOne.strokeColor = blobOne.fillColor
             scene.addChild(blobOne)
             
             let blobOnePhysicsBody = SKPhysicsBody(polygonFromPath: blobOne.path!)
@@ -42,8 +44,10 @@ class ViewController: UIViewController
             blobOne.physicsBody = blobOnePhysicsBody
             
             let radialGravityOne = SKFieldNode.radialGravityField()
-            radialGravityOne.strength = 0.025
-            radialGravityOne.falloff = 0.85
+            radialGravityOne.strength = 0.015
+            radialGravityOne.falloff = 0.5
+            radialGravityOne.region = SKRegion(radius: 100)
+            
             blobOne.addChild(radialGravityOne)
         }
         
@@ -52,27 +56,24 @@ class ViewController: UIViewController
         radialGravity.strength = 0
         scene.addChild(radialGravity)
         
-        createWalls()
+        dragField.strength = 0.5
+        scene.addChild(dragField)
         
-        // ----
+        createWalls()
 
-        scene.filter = metaBallFilter()
+        scene.filter = MetaBallFilter()
         scene.shouldEnableEffects = true
 
     }
 
-    func metaBallFilter() -> CIFilter
-    {
-        return MetaBallFilter()
-    }
-    
     func setGravityFromTouch(touch: UITouch)
     {
-        radialGravity.falloff = 1
+        radialGravity.falloff = 0.5
+        radialGravity.region = SKRegion(radius: 200)
         
         radialGravity.strength = (traitCollection.forceTouchCapability == UIForceTouchCapability.Available) ?
-            Float(touch.force / touch.maximumPossibleForce) * -1.5 :
-            -1.5
+            Float(touch.force / touch.maximumPossibleForce) * 6 :
+            3
         
         radialGravity.position = CGPoint(x: touch.locationInView(skView).x,
             y: view.frame.height - touch.locationInView(skView).y)
@@ -107,6 +108,11 @@ class ViewController: UIViewController
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask
     {
         return UIInterfaceOrientationMask.Portrait
+    }
+    
+    override func prefersStatusBarHidden() -> Bool
+    {
+        return true
     }
     
     override func viewDidLayoutSubviews()
