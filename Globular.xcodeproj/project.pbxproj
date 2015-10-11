@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		055EB8FF1BC8C3B0007D4952 /* MetaBallFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055EB8FE1BC8C3B0007D4952 /* MetaBallFilter.swift */; settings = {ASSET_TAGS = (); }; };
+		0593235D1BCAB6490026C4F9 /* globular.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0593235C1BCAB6490026C4F9 /* globular.gif */; settings = {ASSET_TAGS = (); }; };
 		3EEB51081BC791100002D49A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEB51071BC791100002D49A /* AppDelegate.swift */; };
 		3EEB510A1BC791100002D49A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEB51091BC791100002D49A /* ViewController.swift */; };
 		3EEB510D1BC791100002D49A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EEB510B1BC791100002D49A /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		055EB8FE1BC8C3B0007D4952 /* MetaBallFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaBallFilter.swift; sourceTree = "<group>"; };
+		0593235C1BCAB6490026C4F9 /* globular.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = globular.gif; sourceTree = "<group>"; };
 		3EEB51041BC791100002D49A /* Globular.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Globular.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EEB51071BC791100002D49A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EEB51091BC791100002D49A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 		3EEB51061BC791100002D49A /* Globular */ = {
 			isa = PBXGroup;
 			children = (
+				0593235C1BCAB6490026C4F9 /* globular.gif */,
 				3EEB51071BC791100002D49A /* AppDelegate.swift */,
 				3EEB51091BC791100002D49A /* ViewController.swift */,
 				3EEB510B1BC791100002D49A /* Main.storyboard */,
@@ -124,6 +127,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0593235D1BCAB6490026C4F9 /* globular.gif in Resources */,
 				3EEB51121BC791100002D49A /* LaunchScreen.storyboard in Resources */,
 				3EEB510F1BC791100002D49A /* Assets.xcassets in Resources */,
 				3EEB510D1BC791100002D49A /* Main.storyboard in Resources */,
