@@ -12,19 +12,12 @@ class MetaBallFilter: CIFilter
 {
     var inputImage : CIImage?
     
-    let blurFilter = CIFilter(name: "CIGaussianBlur")!
+    let blurFilter = CIFilter(name: "CIGaussianBlur",
+        withInputParameters: [kCIInputRadiusKey: 30])!
+    
     let thresholdFilter = ThresholdFilter()
-    let heightmapFilter = CIFilter(name: "CIHeightFieldFromMask")!
-    let falseColorFilter = CIFilter(name: "CIFalseColor",
-        withInputParameters: ["inputColor0": CIColor(red: 1, green: 1, blue: 0),
-            "inputColor1": CIColor(red: 0, green: 0.5, blue: 1)])!
-    
-    /// The false color effect, which uses a height map, is quite slow on iPads
-    /// but acceptable on my iPhone 6s. `useFalseColor` controls whether to 
-    /// output the funky amoeba style effect or simply display the output from 
-    /// the threshold filter.
-    var useFalseColor = false
-    
+    let blendWithMask = CIFilter(name: "CIBlendWithMask")!
+
     override var outputImage: CIImage!
     {
         guard let inputImage = inputImage else
@@ -33,24 +26,16 @@ class MetaBallFilter: CIFilter
         }
         
         thresholdFilter.threshold = 0.2
-        
-        blurFilter.setValue(25, forKey: kCIInputRadiusKey)
+
         blurFilter.setValue(inputImage, forKey: kCIInputImageKey)
         
         thresholdFilter.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
         
-        if useFalseColor
-        {
-            heightmapFilter.setValue(thresholdFilter.outputImage, forKey: kCIInputImageKey)
-            
-            falseColorFilter.setValue(heightmapFilter.outputImage, forKey: kCIInputImageKey)
-            
-            return falseColorFilter.outputImage
-        }
-        else
-        {
-            return thresholdFilter.outputImage
-        }
+        blendWithMask.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
+        blendWithMask.setValue(CIImage(), forKey: kCIInputBackgroundImageKey)
+        blendWithMask.setValue(thresholdFilter.outputImage, forKey: kCIInputMaskImageKey)
+
+        return blendWithMask.outputImage
     }
 }
 
@@ -83,3 +68,6 @@ class ThresholdFilter: CIFilter
         return thresholdKernel.applyWithExtent(extent, arguments: arguments)
     }
 }
+
+
+
