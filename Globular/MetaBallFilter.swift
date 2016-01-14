@@ -12,6 +12,19 @@ class MetaBallFilter: CIFilter
 {
     var inputImage : CIImage?
     
+    let blurFilter = CIFilter(name: "CIGaussianBlur")!
+    let thresholdFilter = ThresholdFilter()
+    let heightmapFilter = CIFilter(name: "CIHeightFieldFromMask")!
+    let falseColorFilter = CIFilter(name: "CIFalseColor",
+        withInputParameters: ["inputColor0": CIColor(red: 1, green: 1, blue: 0),
+            "inputColor1": CIColor(red: 0, green: 0.5, blue: 1)])!
+    
+    /// The false color effect, which uses a height map, is quite slow on iPads
+    /// but acceptable on my iPhone 6s. `useFalseColor` controls whether to 
+    /// output the funky amoeba style effect or simply display the output from 
+    /// the threshold filter.
+    var useFalseColor = false
+    
     override var outputImage: CIImage!
     {
         guard let inputImage = inputImage else
@@ -19,20 +32,54 @@ class MetaBallFilter: CIFilter
             return nil
         }
         
-        let blur = CIFilter(name: "CIGaussianBlur")!
-        let edges = CIFilter(name: "CIToneCurve")!
+        thresholdFilter.threshold = 0.2
         
-        blur.setValue(25, forKey: kCIInputRadiusKey)
-        blur.setValue(inputImage, forKey: kCIInputImageKey)
+        blurFilter.setValue(25, forKey: kCIInputRadiusKey)
+        blurFilter.setValue(inputImage, forKey: kCIInputImageKey)
         
-        edges.setValue(CIVector(x: 0, y: 0), forKey: "inputPoint0")
-        edges.setValue(CIVector(x: 0.25, y: 0), forKey: "inputPoint1")
-        edges.setValue(CIVector(x: 0.5, y: 0), forKey: "inputPoint2")
-        edges.setValue(CIVector(x: 0.75, y: 2), forKey: "inputPoint3")
-        edges.setValue(CIVector(x: 1,y: 0), forKey: "inputPoint4")
+        thresholdFilter.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
         
-        edges.setValue(blur.outputImage, forKey: kCIInputImageKey)
+        if useFalseColor
+        {
+            heightmapFilter.setValue(thresholdFilter.outputImage, forKey: kCIInputImageKey)
+            
+            falseColorFilter.setValue(heightmapFilter.outputImage, forKey: kCIInputImageKey)
+            
+            return falseColorFilter.outputImage
+        }
+        else
+        {
+            return thresholdFilter.outputImage
+        }
+    }
+}
+
+class ThresholdFilter: CIFilter
+{
+    var inputImage : CIImage?
+    var threshold: CGFloat = 0.75
+    
+    let thresholdKernel = CIColorKernel(string:
+        "kernel vec4 thresholdFilter(__sample image, float threshold)" +
+        "{" +
+            "   float luma = (image.r * 0.2126) + (image.g * 0.7152) + (image.b * 0.0722);" +
+            
+            "   return (luma > threshold) ? vec4(1.0, 1.0, 1.0, 1.0) : vec4(0.0, 0.0, 0.0, 0.0);" +
+        "}"
+    )
+    
+    
+    override var outputImage : CIImage!
+    {
+        guard let inputImage = inputImage,
+            thresholdKernel = thresholdKernel else
+        {
+            return nil
+        }
         
-        return edges.outputImage
+        let extent = inputImage.extent
+        let arguments = [inputImage, threshold]
+        
+        return thresholdKernel.applyWithExtent(extent, arguments: arguments)
     }
 }

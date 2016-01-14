@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		055EB8FF1BC8C3B0007D4952 /* MetaBallFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055EB8FE1BC8C3B0007D4952 /* MetaBallFilter.swift */; settings = {ASSET_TAGS = (); }; };
-		0593235D1BCAB6490026C4F9 /* globular.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0593235C1BCAB6490026C4F9 /* globular.gif */; settings = {ASSET_TAGS = (); }; };
+		055EB8FF1BC8C3B0007D4952 /* MetaBallFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055EB8FE1BC8C3B0007D4952 /* MetaBallFilter.swift */; };
+		0593235D1BCAB6490026C4F9 /* globular.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0593235C1BCAB6490026C4F9 /* globular.gif */; };
 		3EEB51081BC791100002D49A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEB51071BC791100002D49A /* AppDelegate.swift */; };
 		3EEB510A1BC791100002D49A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEB51091BC791100002D49A /* ViewController.swift */; };
 		3EEB510D1BC791100002D49A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EEB510B1BC791100002D49A /* Main.storyboard */; };
