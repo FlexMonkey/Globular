@@ -1,15 +1,15 @@
 # Globular
-#####Colourful Metaballs Controlled by 3D Touch
+##### Colourful Metaballs Controlled by 3D Touch
 
 ![screenshot](Globular/globular.gif)
 
-######_Companion project to: http://flexmonkey.blogspot.co.uk/2015/10/globular-colourful-metaballs-controlled.html_
+###### _Companion project to: http://flexmonkey.blogspot.co.uk/2015/10/globular-colourful-metaballs-controlled.html_
 
 I've seen a few articles this week about a beautiful looking app called Pause. One of Pause's features is the ability to move a fluid-like blob around the screen which obviously got me thinking, "how could I create something similar in Swift". The result is another little experiment, _Globular_, which allows a user to move metaballs around the screen by touch where the touch location acts as a radial gravity source with its strength determined by the force of that touch.
 
 There are a few steps in creating this effect: a SpriteKit based "skeleton" for overall liquid mass followed by a Core Image post processing step to render the smooth metaball visuals.
 
-##Creating the SpriteKit "Skeleton" 
+## Creating the SpriteKit "Skeleton" 
 
 The structure of the liquid mass is formed from 150 individual circles of different colours. Each circle is actually a `SKShapeNode` with a radial gravity field that attracts it to every other circle.
 
@@ -79,7 +79,7 @@ Finally, to make every blob attract every other blob, I need to create a radial 
 
 The end result is the raw multicoloured circles that form the liquid's scaffold. Each individual circle is attracted to every other and, with the help of an additional drag field, they move serenely and appear to have a surface tension like effect.
 
-##Core Image Post Processing
+## Core Image Post Processing
 
 Now the basic physics is in place, I want to convert those discrete circles into a joined metaballs. The basic technique to do this is blur the image and then tweak the tone curve to knock out the mid-tones. Often the latter part of this effect is achieved with a threshold filter, but since Core Image doesn't have one of those, a `CIToneCurve` does something similar.
 
@@ -122,7 +122,7 @@ I can now set an instance of my new filter as the scene's filter and ensure its 
 
 The end result now looks a lot more "liquidy":
 
-##Touch Handling
+## Touch Handling
 
 All that's left now is to have the individual blobs react to the user's touch. To do this, I create another "master" radial gravity field:
 
@@ -145,6 +145,6 @@ All that's left now is to have the individual blobs react to the user's touch. T
         y: view.frame.height - touch.locationInView(skView).y)
 ```
 
-##Source Code
+## Source Code
 
 All the source code for this project is available in my GitHub repository here. Enjoy!
